@@ -5,7 +5,9 @@
 
 <h2>Employee CRUD</h2>
 
-<a class="btn btn-outline-primary" style="margin-bottom: 10px"><i class="fa fa-plus"></i> Add New Employee</a>
+<a class="btn btn-outline-primary"
+   style="margin-bottom: 10px"
+   onclick="PopupForm('@Url.Action("AddOrEdit", "Employee")')"><i class="fa fa-plus"></i> Add New Employee</a>
 
 <table id="employeeTable" class="table table-striped table-bordered" style="width: 100%">
     <thead>
@@ -26,15 +28,17 @@
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script>
+        var Popup, dataTable;
+
         $(document).ready(function () {
-            $('#employeeTable').DataTable({
+            dataTable = $('#employeeTable').DataTable({
                 'ajax': {
                     'url': '/Employee/GetData',
                     'type': 'GET',
                     'datatype': 'json'
                 },
                 'columns': [
-                    { 'data': 'FullName' },
+                    { 'data': 'Full Name' },
                     { 'data': 'Age' },
                     { 'data': 'Department' },
                     { 'data': 'Position' },
@@ -45,5 +49,23 @@
                 }
             });
         });
+
+        function PopupForm(url) {
+            var createDiv = $('<div/>');
+            $.get(url).done(function (response) {
+                createDiv.html(response);
+
+                Popup = createDiv.dialog({
+                    autoOpen: true,
+                    resizable: false,
+                    title: 'Fill Employee Details',
+                    height: 500,
+                    width: 700,
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    }
+                });
+            });
+        }
     </script>
     }

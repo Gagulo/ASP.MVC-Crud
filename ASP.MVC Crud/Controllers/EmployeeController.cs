@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Web.Mvc;
 using ASP.MVC_Crud.Models;
+using System;
+using System.Data.Entity;
 
 namespace ASP.MVC_Crud.Controllers
 {
@@ -25,7 +27,15 @@ namespace ASP.MVC_Crud.Controllers
         [HttpGet]
         public ActionResult AddOrEdit(int id = 0)
         {
-            return View(new ASPMVCEmployee());
+            if (id == 0)
+                return View(new ASPMVCEmployee());
+            else
+            {
+                using (ModelDB db = new ModelDB())
+                {
+                    return View(db.ASPMVCEmployees.Where(x => x.EmployeeID==id).FirstOrDefault<ASPMVCEmployee>());
+                }
+            }
         }
 
         [HttpPost]
@@ -33,9 +43,30 @@ namespace ASP.MVC_Crud.Controllers
         {
             using (ModelDB db = new ModelDB())
             {
-                db.ASPMVCEmployees.Add(employee);
+                if (employee.EmployeeID == 0)
+                {
+                    db.ASPMVCEmployees.Add(employee);
+                    db.SaveChanges();
+                    return Json(new { succes = true, message = "Employee Added" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    db.Entry(employee).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return Json(new { succes = true, message = "Employee Updated" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            using (ModelDB db = new ModelDB())
+            {
+                ASPMVCEmployee employee = db.ASPMVCEmployees.Where(x => x.EmployeeID == id).FirstOrDefault<ASPMVCEmployee>();
+                db.ASPMVCEmployees.Remove(employee);
                 db.SaveChanges();
-                return Json(new { succes = true, message = "Employee Added" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, message = "Deleted Successfully" }, JsonRequestBehavior.AllowGet);
             }
         }
     }

@@ -4,7 +4,7 @@
     Layout = null;
 }
 
-@using (Html.BeginForm("AddOrEdit", "Employee", FormMethod.Post, new {onsubmit = "return SubmitForm(this)"}))
+@using (Html.BeginForm("AddOrEdit", "Employee", FormMethod.Post, new {onsubmit = "return SubmitForm(this)" }))
 {
     @Html.HiddenFor(model => model.EmployeeID)
     <div class="form-group">

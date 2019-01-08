@@ -6,7 +6,7 @@
 
 <a class="btn btn-outline-primary"
    style="margin-bottom: 10px"
-   onclick="PopupForm('@Url.Action("AddOrEdit", "Employee")')"><i class="fa fa-plus"></i> Add New Employee</a>
+   onclick="PopupForm('@Url.Action("AddOrEdit","Employee")')"><i class="fa fa-plus"></i> Add New Employee</a>
 
 <table id="employeeTable" class="table table-striped table-bordered" style="width: 100%">
     <thead>
@@ -26,25 +26,26 @@
 @section scripts{
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
     <script>
         var Popup, dataTable;
 
         $(document).ready(function () {
-            dataTable = $('#employeeTable').DataTable({
-                'ajax': {
-                    'url': '/Employee/GetData',
-                    'type': 'GET',
-                    'datatype': 'json'
+            dataTable = $("#employeeTable").DataTable({
+                "ajax": {
+                    "url": "/Employee/GetData",
+                    "type": "GET",
+                    "datatype": "json"
                 },
-                'columns': [
-                    { 'data': 'Full Name' },
-                    { 'data': 'Age' },
-                    { 'data': 'Department' },
-                    { 'data': 'Position' },
-                    { 'data': 'Salary' }
+                "columns": [
+                    { "data": "FullName" },
+                    { "data": "Age" },
+                    { "data": "Department" },
+                    { "data": "Position" },
+                    { "data": "Salary" }
                 ],
-                'language': {
-                    'emptyTable': 'No data was found. <b>Add</b> new Employee to view data.'
+                "language": {
+                    "emptyTable": "No data was found. <b>Add</b> new Employee to view data."
                 }
             });
         });
@@ -58,7 +59,7 @@
                     autoOpen: true,
                     resizable: false,
                     title: 'Fill Employee Details',
-                    height: 550,
+                    height: 650,
                     width: 500,
                     close: function () {
                         Popup.dialog('destroy').remove();
@@ -69,7 +70,7 @@
 
         function SubmitForm(form) {
             $.validator.unobtrusive.parse(form);
-            if ($(form).valid()) {
+            if($(form).valid()){
                 $.ajax({
                     type: "POST",
                     url: form.action,
@@ -77,11 +78,11 @@
                     success: function (data) {
                         if (data.success) {
                             Popup.dialog('close');
-                            dataTable.ajax.reload();
+                            $('#employeeTable').DataTable().ajax.reload();
                         }
                     }
-                })
-            };
+                });
+            }
             return false;
         }
     </script>

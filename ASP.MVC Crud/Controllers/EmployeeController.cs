@@ -29,9 +29,14 @@ namespace ASP.MVC_Crud.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddOrEdit()
+        public ActionResult AddOrEdit(ASPMVCEmployee employee)
         {
-            return View();
+            using (ModelDB db = new ModelDB())
+            {
+                db.ASPMVCEmployees.Add(employee);
+                db.SaveChanges();
+                return Json(new { succes = true, message = "Employee Added" }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

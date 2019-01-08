@@ -11,12 +11,15 @@ namespace ASP.MVC_Crud.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class ASPMVCEmployee
     {
         public int EmployeeID { get; set; }
+        [Required(ErrorMessage = "This field is Required!")]
         public string FullName { get; set; }
         public Nullable<int> Age { get; set; }
+        [Required(ErrorMessage = "This field is Required!")]
         public string Department { get; set; }
         public string Position { get; set; }
         public Nullable<int> Salary { get; set; }

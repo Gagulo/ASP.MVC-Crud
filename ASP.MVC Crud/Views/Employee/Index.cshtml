@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Employee List";
 }
 
@@ -59,13 +58,31 @@
                     autoOpen: true,
                     resizable: false,
                     title: 'Fill Employee Details',
-                    height: 500,
-                    width: 700,
+                    height: 550,
+                    width: 500,
                     close: function () {
                         Popup.dialog('destroy').remove();
                     }
                 });
             });
+        }
+
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            Popup.dialog('close');
+                            dataTable.ajax.reload();
+                        }
+                    }
+                })
+            };
+            return false;
         }
     </script>
     }
